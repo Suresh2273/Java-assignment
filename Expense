@@ -1,0 +1,24 @@
+package f254;
+
+import java.time.LocalDate;
+
+public class Expense { private int expenseId; private String type; private double amount; private String status;
+private Employee requester; private LocalDate date;
+
+public Expense(int expenseId, String type, double amount, Employee requester) { this.expenseId = expenseId;
+this.type = type; this.amount = amount;
+this.status = "SUBMITTED"; this.requester = requester; this.date = LocalDate.now();
+}
+ 
+public int getExpenseId() { return expenseId; } public String getType() { return type; }
+public double getAmount() { return amount; } public String getStatus() { return status; }
+public Employee getRequester() { return requester; } public LocalDate getDate() { return date; }
+
+protected void setStatus(String status) { this.status = status; } public void setType(String type) { this.type = type; }
+public void setAmount(double amount) { this.amount = amount; }
+
+@Override
+public String toString() {
+return "Expense#" + expenseId + " [" + type + ", " + amount + ", " + status + ", Req: " + requester.getName() + "]";
+}
+}
