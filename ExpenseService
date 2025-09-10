@@ -1,0 +1,90 @@
+Packagef254;
+
+import java.util.*; import java.time.Month;
+
+public class ExpenseService {
+private List<Expense> expenses = new ArrayList<>();
+
+
+public void submit(Expense expense) { expenses.add(expense);
+System.out.println("Expense submitted: " + expense);
+}
+
+public void submit(Expense expense, String costCenter) { submit(expense);
+System.out.println(" -> Cost Center: " + costCenter);
+}
+
+public void submit(Expense expense, String costCenter, String attachment) { submit(expense, costCenter);
+System.out.println(" -> Attachment: " + attachment);
+ 
+}
+
+
+public void approve(Manager manager, Expense expense) { boolean result = manager.approve(expense); System.out.println("Manager " + manager.getName() +
+(result ? " approved " : " rejected ") + expense);
+}
+
+
+public void reimburse(Expense expense) {
+if (expense.getStatus().equals("APPROVED")) { expense.setStatus("REIMBURSED"); System.out.println("Reimbursed: " + expense);
+}
+}
+
+
+public void listByStatus(String status) { System.out.println("Expenses with status: " + status); for (Expense e : expenses) {
+if (e.getStatus().equals(status)) { System.out.println(e);
+}
+}
+}
+
+public double calculateTotal(Employee emp) { double total = 0;
+for (Expense e : expenses) {
+if (e.getRequester().equals(emp) && e.getStatus().equals("REIMBURSED")) { total += e.getAmount();
+}
+}
+return total;
+}
+
+
+public void monthlySummary(int year) { Map<Month, Double> totals = new HashMap<>();
+
+for (Expense e : expenses) {
+if (e.getStatus().equals("REIMBURSED") && e.getDate().getYear() == year) { Month m = e.getDate().getMonth();
+totals.put(m, totals.getOrDefault(m, 0.0) + e.getAmount());
+ 
+}
+}
+
+System.out.println("\n==== Monthly Reimbursed Summary (All Employees) for " + year + "
+====");
+for (Month m : Month.values()) {
+double amt = totals.getOrDefault(m, 0.0); if (amt > 0) {
+System.out.println(m + ": " + amt);
+}
+}
+}
+
+
+public void monthlySummaryByEmployee(int year) {
+Map<Employee, Map<Month, Double>> summary = new HashMap<>();
+
+for (Expense e : expenses) {
+if (e.getStatus().equals("REIMBURSED") && e.getDate().getYear() == year) { Employee emp = e.getRequester();
+Month m = e.getDate().getMonth();
+
+summary.putIfAbsent(emp, new HashMap<>()); Map<Month, Double> empMap = summary.get(emp);
+
+empMap.put(m, empMap.getOrDefault(m, 0.0) + e.getAmount());
+}
+}
+
+System.out.println("\n==== Monthly Reimbursed Summary by Employee for " + year + "
+====");
+for (Employee emp : summary.keySet()) { System.out.println("Employee: " + emp.getName()); for (Month m : Month.values()) {
+double amt = summary.get(emp).getOrDefault(m, 0.0); if (amt > 0) {
+System.out.println("  " + m + ": " + amt);
+}
+}
+}
+}
+}
