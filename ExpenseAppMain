@@ -1,0 +1,25 @@
+package f254;
+
+public class ExpenseAppMain {
+public static void main(String[] args) {
+Employee emp1 = new Employee(101, "Riya", "IT", "riya@company.com"); Employee emp2 = new Employee(102, "Karthik", "HR", "karthik@company.com"); Employee emp3 = new Employee(103, "Meena", "Sales", "meena@company.com");
+
+Manager mgr1 = new Manager(201, "Arjun", "Finance", "arjun@company.com", 4000); Manager mgr2 = new Manager(202, "Sneha", "Operations", "sneha@company.com", 8000);
+ExpenseService service = new ExpenseService();
+
+
+Expense exp1 = new Expense(1, "Travel", 2500, emp1); Expense exp2 = new Expense(2, "Meals", 6000, emp2); Expense exp3 = new Expense(3, "Travel", 3500, emp3); Expense exp4 = new Expense(4, "Meals", 1500, emp1);
+
+service.submit(exp1); service.submit(exp2); service.submit(exp3); service.submit(exp4);
+
+service.approve(mgr1, exp1); service.approve(mgr1, exp2); service.approve(mgr2, exp3); service.approve(mgr2, exp4);
+
+
+service.reimburse(exp1); service.reimburse(exp3); service.reimburse(exp4);
+
+
+System.out.println("\n--- Totals per Employee ---"); System.out.println(emp1.getName() + ": " + service.calculateTotal(emp1)); System.out.println(emp2.getName() + ": " + service.calculateTotal(emp2)); System.out.println(emp3.getName() + ": " + service.calculateTotal(emp3));
+
+service.monthlySummary(2025); service.monthlySummaryByEmployee(2025);
+}
+}
